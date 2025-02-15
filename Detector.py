@@ -13,7 +13,6 @@ if not cap.isOpened():
     print("Erro ao abrir a câmera!")
     exit()
 
-
 threshold = 0.5 
 
 cores_classes = {}
@@ -46,7 +45,7 @@ while True:
         cv2.rectangle(frame, (x1, y1), (x2, y2), cor, 2)
         cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, cor, 2)
 
-    cv2.imshow("Detecção em Tempo Real", frame)
+    cv2.imshow("Detector em tempo real", frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

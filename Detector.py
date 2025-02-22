@@ -1,11 +1,12 @@
 from ultralytics import YOLO
 import cv2
 import numpy as np
+import torch
 
-print(f'OpenCV Version: {cv2.__version__}')
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+print(f'Usando dispositivo: {device}')
 
-
-modelo = YOLO('yolov8l.pt')
+modelo = YOLO('yolov8l.pt').to(device)
 
 cap = cv2.VideoCapture(0)
 
@@ -13,8 +14,7 @@ if not cap.isOpened():
     print("Erro ao abrir a câmera!")
     exit()
 
-threshold = 0.5 
-
+threshold = 0.5
 cores_classes = {}
 
 def gerar_cor_unica():
@@ -27,13 +27,20 @@ while True:
         print("Falha ao capturar imagem")
         break
 
-    resultados = modelo(frame)
+    frame_resized = cv2.resize(frame, (640, 640))
+    frame_tensor = torch.from_numpy(frame_resized).permute(2, 0, 1).float().unsqueeze(0) / 255.0
+    frame_tensor = frame_tensor.to(device)
+
+    resultados = modelo(frame_tensor)
 
     detecções_filtradas = [det for det in resultados[0].boxes if det.conf > threshold]
-
+    
+    height, width, _ = frame.shape
+    scale_x = width / 640
+    scale_y = height / 640
     for det in detecções_filtradas:
         x1, y1, x2, y2 = det.xyxy[0].cpu().numpy()
-        x1, y1, x2, y2 = map(int, [x1, y1, x2, y2])
+        x1, y1, x2, y2 = int(x1 * scale_x), int(y1 * scale_y), int(x2 * scale_x), int(y2 * scale_y)
         
         label = modelo.names[int(det.cls)]
 

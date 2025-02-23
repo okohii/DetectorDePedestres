@@ -1,6 +1,7 @@
 import speech_recognition as sr
 import pyttsx3
 import os
+import time
 import random
 import requests
 
@@ -23,7 +24,7 @@ def configurar_voz(language):
             if 'english' in voice.name.lower():
                 engine.setProperty('voice', voice.id)
                 break
-    engine.setProperty('rate', 220)  # Aumentar a velocidade da fala
+    engine.setProperty('rate', 220)
 
 def ouvir_comando(language='pt-BR'):
     with sr.Microphone() as source:
@@ -44,6 +45,9 @@ def falar(texto):
     engine.say(texto)
     engine.runAndWait()
 
+def verificar_comando(comando, palavras_chave):
+    return any(palavra in comando for palavra in palavras_chave)
+
 def responder_com_gemini(comando, language='pt-BR'):
     headers = {
         'Content-Type': 'application/json'
@@ -57,35 +61,38 @@ def responder_com_gemini(comando, language='pt-BR'):
     if response.status_code == 200:
         try:
             response_json = response.json()
-            print("Resposta completa da API:", response_json)
             resposta_texto = response_json['candidates'][0]['content']['parts'][0]['text'].strip()
             resposta_texto = resposta_texto.replace('*', '').replace('\n', ' ')
             return resposta_texto
         except KeyError as e:
-            print(f"Erro ao acessar a chave: {e}")
             return "Desculpe, houve um erro ao processar sua solicitação."
     else:
-        print("Erro na resposta da API:", response.status_code, response.text)
         return "Desculpe, houve um erro ao processar sua solicitação."
 
 def executar_tarefa(comando, language='pt-BR'):
-    # Adicionar lógica para abrir programas com base no comando antes de chamar a API
-    if 'abrir navegador' in comando or 'abrir o navegador' in comando:
-        falar("Abrindo o navegador.")
-        os.system("start chrome")  # Exemplo de abrir o Google Chrome
-        return
-    elif 'abrir bloco de notas' in comando:
-        falar("Abrindo o Bloco de Notas.")
-        os.system("start notepad")  # Exemplo de abrir o Bloco de Notas
-        return
-    elif 'abrir calculadora' in comando:
-        falar("Abrindo a Calculadora.")
-        os.system("start calc")  # Exemplo de abrir a Calculadora
-        return
-
-    # Caso contrário, chame a API do Gemini
-    resposta = responder_com_gemini(comando, language)
-    falar(resposta)
+    if verificar_comando(comando, ['olá', 'oi', 'hello', 'hi', 'hey', 'e aí', 'e ai', 'tudo bem', 'tá bem', 'como vai', 'como está', 'how are you', 'how are you doing', 'how do you do']):
+        falar("Olá! Tudo bem?" if language == 'pt-BR' else "Hello! How are you?")
+    elif verificar_comando(comando, ['quem é você', 'quem você é', 'what is your name', 'what are you', 'who are you', 'who you are']):
+        falar("Eu sou um assistente virtual criado por um gostosão chamado Gustavo." if language == 'pt-BR' else "I am a virtual assistant created by a hottie named Gustavo.")
+    elif verificar_comando(comando, ['navegador', 'browser']):
+        falar("Abrindo o navegador" if language == 'pt-BR' else "Opening the browser")
+        os.system("start opera")
+    elif verificar_comando(comando, ['que horas são', 'whats the time', 'what the time', "what's time", "what's the time", 'what is time', 'what time']):
+        from datetime import datetime
+        agora = datetime.now().strftime("%H:%M")
+        falar(f"Agora são {agora}" if language == 'pt-BR' else f"The time is {agora}")
+    elif verificar_comando(comando, ['preparar', 'área de trabalho', 'workspace']):
+        falar("Preparando a área de trabalho" if language == 'pt-BR' else "Preparing the workspace")
+        os.system("start opera")
+        os.system("start code")
+        os.system("start C:\\Users\\okohi\\AppData\\Local\\Postman\\Postman.exe")
+        os.system("explorer")
+    elif verificar_comando(comando, ['descansar', 'ir embora', 'soneca', 'rest', 'nap', 'comes e bebes', 'comes e bebe', 'bye', 'tchau', 'adeus', 'até mais', 'até depois', 'até logo', 'até breve', 'até a próxima', 'até a próxima vez', 'até a próxima vez']):
+        falar("Beleza, vou tirar uma soneca. Até depois moral!" if language == 'pt-BR' else "Alright, I'm going to take a nap. See you later!")
+        exit()
+    else:
+        resposta = responder_com_gemini(comando, language)
+        falar(resposta)
 
 if __name__ == "__main__":
     falar("Português ou, or English?")

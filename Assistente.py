@@ -79,7 +79,6 @@ def responder_com_gemini(comando, language='pt-BR'):
             response_json = response.json()  # Converte a resposta para JSON
             resposta_texto = response_json['candidates'][0]['content']['parts'][0]['text'].strip()  # Extrai o texto da resposta
             resposta_texto = resposta_texto.replace('*', '').replace('\n', ' ')  # Remove caracteres indesejados
-            print(resposta_texto)  # Mostrar apenas a resposta no terminal
             return resposta_texto  # Retorna a resposta
         except KeyError as e:
             return "Desculpe, houve um erro ao processar sua solicitação."  # Mensagem de erro se não conseguir acessar a chave
@@ -95,7 +94,11 @@ def executar_tarefa(comando, language='pt-BR'):
         print(resposta)  # Exibe a resposta no terminal
         falar(resposta)  # Converte a resposta em fala
     elif verificar_comando(comando, ['quem é você', 'quem você é', 'what is your name', 'what are you', 'who are you', 'who you are']):
-        resposta = "Eu sou um assistente virtual criado por um gostosão chamado Gustavo." if language == 'pt-BR' else "I am a virtual assistant created by a hottie named Gustavo."
+        resposta = "Eu sou um assistente virtual criado por um gostosão chamado Gustavo." if language == 'pt-BR' else "I am a virtual assistant created by a delicious man named Gustavo."
+        print(resposta)  # Exibe a resposta no terminal
+        falar(resposta)  # Converte a resposta em fala
+    elif verificar_comando(comando, ['me fala sobre o jp', 'JP', 'quem é o jp', 'jp', 'seu criador jp']):
+        resposta = "O JP, ou João Pedro Mori Noce é um dos colaboradores que ajudou a me desenvolver, é um cara alegre, proativo e interessado, um ótimo desenvolvedor. Porém, não comente nada sobre os anos entre 1933 e 1945 na Alemanha, ele pode ficar desconfortável." if language == 'pt-BR' else "JP, or João Pedro Mori Noce is one of the employees who helped develop me, is a cheerful, proactive and interested guy, a great developer. However, it does not comment on the years between 1933 and 1945 in Germany, it can be uncomfortable."
         print(resposta)  # Exibe a resposta no terminal
         falar(resposta)  # Converte a resposta em fala
     elif verificar_comando(comando, ['navegador', 'browser']):
@@ -127,7 +130,10 @@ def executar_tarefa(comando, language='pt-BR'):
         print(resposta)  # Exibe a resposta no terminal
         falar(resposta)  # Converte a resposta em fala
 
+
+# Deixa esse bloco por último, se não quebra tudo!!!!!
 if __name__ == "__main__":
+    print("Português ou, or English?")
     falar("Português ou, or English?")  # Pergunta ao usuário em qual língua ele gostaria de se comunicar
     language = 'pt-BR'
     while True:
@@ -143,6 +149,7 @@ if __name__ == "__main__":
             falar("You chose English. How can I help you today?")  # Responde em inglês
             break
         else:
+            print("Português ou, or English?")
             falar("Português ou, or English?")  # Repete a pergunta se não entender a escolha
 
     while True:

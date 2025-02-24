@@ -98,29 +98,41 @@ def executar_tarefa(comando, language='pt-BR'):
         resposta = "Olá! Tudo bem?" if language == 'pt-BR' else "Hello! How are you?"
         print(resposta)  # Exibe a resposta no terminal
         falar(resposta)  # Converte a resposta em fala
+        
+        
     elif verificar_comando(comando, ['quem é você', 'quem você é', 'what is your name', 'what are you', 'who are you', 'who you are']):
         resposta = "Eu sou um assistente virtual chamado Alpha, criado por um gostosão chamado Gustavo." if language == 'pt-BR' else "I am a virtual assistant named Alpha created by a delicious man named Gustavo."
         print(resposta)  # Exibe a resposta no terminal
         falar(resposta)  # Converte a resposta em fala
+        
+        
     elif verificar_comando(comando, ['me fala sobre o jp', 'JP', 'quem é o jp', 'jp', 'seu criador jp']):
         resposta = "O JP, ou João Pedro Mori Noce é um dos colaboradores que ajudou a me desenvolver, é um cara alegre, proativo e interessado, um ótimo desenvolvedor. Porém, não comente nada sobre os anos entre 1933 e 1945 na Alemanha, ele pode ficar desconfortável." if language == 'pt-BR' else "JP, or João Pedro Mori Noce is one of the employees who helped develop me, is a cheerful, proactive and interested guy, a great developer. However, it does not comment on the years between 1933 and 1945 in Germany, it can be uncomfortable."
         print(resposta)  # Exibe a resposta no terminal
         falar(resposta)  # Converte a resposta em fala
+        
+        
     elif verificar_comando(comando, ['me fala sobre a ellen', 'ellen', 'me fale sobre a escoteira do nosso grupo', 'escoteira', 'desbravadora', 'ellen desbravadora', 'ellen escoteira', 'ellen escoteira desbravadora', 'ellen desbravadora escoteira']):
         resposta = "A Ellen é nossa amiguinha que faz parte dos desbravadores, que é a mesma coisa que uma escoteira, come musgo de árvore e adora acampar, você pode conhecer um membro de sua tribo que aparece no filme UP em altas aventuras." if language == 'pt-BR' else "Ellen is our little friend who is part of the Pathfinders, which is the same thing as a Girl Scout, she eats tree moss and loves camping, you can meet a member of her tribe who appears in the film UP in High Adventures."
         print(resposta)  # Exibe a resposta no terminal
         falar(resposta)  # Converte a resposta em fala
+        
+        
     elif verificar_comando(comando, ['navegador', 'browser']):
         resposta = "Abrindo o navegador" if language == 'pt-BR' else "Opening the browser"
         print(resposta)  # Exibe a resposta no terminal
         falar(resposta)  # Converte a resposta em fala
         os.system("start opera")  # Abre o navegador
+        
+        
     elif verificar_comando(comando, ['que horas são', 'whats the time', 'what the time', "what's time", "what's the time", 'what is time', 'what time']):
         from datetime import datetime
         agora = datetime.now().strftime("%H:%M")  # Obtém a hora atual
         resposta = f"Agora são {agora}" if language == 'pt-BR' else f"The time is {agora}"
         print(resposta)  # Exibe a resposta no terminal
         falar(resposta)  # Converte a resposta em fala
+        
+        
     elif verificar_comando(comando, ['preparar', 'área de trabalho', 'workspace']):
         resposta = "Preparando a área de trabalho" if language == 'pt-BR' else "Preparing the workspace"
         print(resposta)  # Exibe a resposta no terminal
@@ -129,11 +141,15 @@ def executar_tarefa(comando, language='pt-BR'):
         os.system("start code")  # Abre o Visual Studio Code
         os.system("start C:\\Users\\okohi\\AppData\\Local\\Postman\\Postman.exe")  # Abre o Postman
         os.system("explorer")  # Abre o explorador de arquivos
+        
+        
     elif verificar_comando(comando, ['descansar', 'ir embora', 'soneca', 'rest', 'nap', 'comes e bebes', 'comes e bebe', 'bye', 'tchau', 'adeus', 'até mais', 'até depois', 'até logo', 'até breve', 'até a próxima', 'até a próxima vez', 'até a próxima vez']):
         resposta = "Beleza, vou tirar uma soneca. Até depois moral!" if language == 'pt-BR' else "Alright, I'm going to take a nap. See you later!"
         print(resposta)  # Exibe a resposta no terminal
         falar(resposta)  # Converte a resposta em fala
         exit()  # Encerra o assistente
+        
+        
     else:
         if language == 'pt-BR':
             print('Não tenho respostas locais para isso, quer consultar minha api?')
@@ -141,10 +157,17 @@ def executar_tarefa(comando, language='pt-BR'):
         else:
             print('I do not have local answers for that, do you want to consult my api?')
             falar('I do not have local answers for that, do you want to consult my api?')
-            
+        
+        ultimo_comando = comando  # Armazena o último comando
         confirmacao = ouvir_comando(language)
         if 'sim' in confirmacao or 'yes' in confirmacao:
-            resposta = responder_com_gemini(comando, language)  # Obtém a resposta da API do Google AI Gemini
+            if language == 'pt-BR':
+                print('Consultando a API...')
+                falar('Consultando a API...')
+            elif language == 'en-US':
+                print('Consulting the API...')
+                falar('Consulting the API...')
+            resposta = responder_com_gemini(ultimo_comando, language)  # Obtém a resposta da API do Google AI Gemini com o último comando
             print(resposta)  # Exibe a resposta no terminal
             falar(resposta)  # Converte a resposta em fala
         elif 'não' in confirmacao or 'no' in confirmacao:
@@ -152,7 +175,7 @@ def executar_tarefa(comando, language='pt-BR'):
             print(resposta)
             falar(resposta)
 
-# Deixa esse bloco por último, se não quebra tudo!!!!!
+# ! Deixa esse bloco por último, se não quebra tudo!!!!!
 if __name__ == "__main__":
     print("Português ou, or English?")
     falar("Português ou, or English?")  # Pergunta ao usuário em qual língua ele gostaria de se comunicar

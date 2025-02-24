@@ -141,13 +141,34 @@ def executar_tarefa(comando, language='pt-BR'):
         os.system("start code")  # Abre o Visual Studio Code
         os.system("start C:\\Users\\okohi\\AppData\\Local\\Postman\\Postman.exe")  # Abre o Postman
         os.system("explorer")  # Abre o explorador de arquivos
+        os.system("notepad") # Abre o bloco de notas
         
         
-    elif verificar_comando(comando, ['descansar', 'ir embora', 'soneca', 'rest', 'nap', 'comes e bebes', 'comes e bebe', 'bye', 'tchau', 'adeus', 'até mais', 'até depois', 'até logo', 'até breve', 'até a próxima', 'até a próxima vez', 'até a próxima vez']):
-        resposta = "Beleza, vou tirar uma soneca. Até depois moral!" if language == 'pt-BR' else "Alright, I'm going to take a nap. See you later!"
+    elif verificar_comando(comando, ['fechar tudo', 'close all', 'fechar aplicativos', 'close applications']):
+        resposta = "Fechando todos os aplicativos abertos." if language == 'pt-BR' else "Closing all open applications."
         print(resposta)  # Exibe a resposta no terminal
         falar(resposta)  # Converte a resposta em fala
-        exit()  # Encerra o assistente
+        os.system("taskkill /F /FI \"STATUS eq RUNNING\"")  # Fecha todos os aplicativos abertos
+        
+        
+    elif verificar_comando(comando, ['obrigado', 'valeu', 'agradecido', 'grato', 'thank you', 'thanks', 'thanks a lot', 'thanks so much', 'thanks very much', 'thanks a bunch', 'thanks a ton', 'thanks heaps']):
+        respostas_pt = [
+            "De nada! Estou aqui para ajudar.",
+            "Por nada! Qualquer coisa, estou por aqui.",
+            "Imagina! Sempre à disposição.",
+            "Disponha! Fico feliz em ajudar.",
+            "Não há de quê! Estou aqui para isso."
+        ]
+        respostas_en = [
+            "You're welcome! I'm here to help.",
+            "No problem! I'm always here if you need me.",
+            "Don't mention it! Always at your service.",
+            "Anytime! Happy to help.",
+            "No worries! That's what I'm here for."
+        ]
+        resposta = random.choice(respostas_pt) if language == 'pt-BR' else random.choice(respostas_en)
+        print(resposta)  # Exibe a resposta no terminal
+        falar(resposta)  # Converte a resposta em fala
         
         
     else:
@@ -177,6 +198,7 @@ def executar_tarefa(comando, language='pt-BR'):
 
 # ! Deixa esse bloco por último, se não quebra tudo!!!!!
 if __name__ == "__main__":
+
     print("Português ou, or English?")
     falar("Português ou, or English?")  # Pergunta ao usuário em qual língua ele gostaria de se comunicar
     language = 'pt-BR'
